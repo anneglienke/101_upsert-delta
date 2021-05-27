@@ -1,0 +1,4 @@
+PassengerId,Survived,Pclass,Name,Sex,Age,Embarked
+4,1,1,"Teste",male,30,S
+5,0,3,"Allen",male,35,S
+6,0,3,"Moran",male,,Q

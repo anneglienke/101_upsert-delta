@@ -1,0 +1,6 @@
+PassengerId,Survived,Pclass,Name,Sex,Age,Embarked
+1,0,3,"Braund",male,22,S
+2,1,1,"Cumings",female,38,C
+3,1,3,"Heikkinen",female,26,S
+4,1,1,"Futrelle",female,35,S
+
