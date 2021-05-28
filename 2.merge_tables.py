@@ -5,17 +5,12 @@ from pyspark.sql.functions import *
 from IPython.display import display
 from pyspark.sql import SQLContext
 
-load_dotenv()
-
-jars = os.environ.get("JARS_PATH")
-
 if __name__ == '__main__':
     
     # Criar a sessão Spark
     spark = SparkSession \
       .builder \
       .appName("Job - Raw-zone") \
-      .config("spark.jars", jars) \
       .config("spark.jars.packages", "io.delta:delta-core_2.12:0.8.0") \
       .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
       .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
@@ -67,21 +62,19 @@ if __name__ == '__main__':
         "delta_flag":"n.update_flag",
         "delta_timestamp":"n.delta_timestamp"
       }) \
-    .whenNotMatchedInsert(
-      values = {
-        "PassengerId":"n.PassengerId",
-        "Survived":"n.Survived",
-        "Pclass":"n.Pclass",
-        "Name":"n.Name",
-        "Sex":"n.Sex",
-        "Age":"n.Age",
-        "Embarked":"n.Embarked",
-        "delta_flag":"n.delta_flag",
-        "delta_timestamp":"n.delta_timestamp"
-      }) \
+      .whenNotMatchedInsert( 
+        values = {
+          "PassengerId":"n.PassengerId",
+          "Survived":"n.Survived",
+          "Pclass":"n.Pclass",
+          "Name":"n.Name",
+          "Sex":"n.Sex",
+          "Age":"n.Age",
+          "Embarked":"n.Embarked",
+          "delta_flag":"n.delta_flag",
+          "delta_timestamp":"n.delta_timestamp"   
+        }) \
     .execute() 
 
     # Parar a sessão Spark
     spark.stop()
-
- 
