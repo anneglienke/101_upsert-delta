@@ -33,7 +33,7 @@ if __name__ == '__main__':
    # Criar view para adicionar colunas
     new_data.createOrReplaceTempView("new_data")
 
-   # Criar colunas: delta_flag com valor I e current timestamp
+   # Criar colunas: delta_flag com valor I, update_flag com valor U e current timestamp
     new_data = spark.sql(
         """select
                 new_data.*,
@@ -84,20 +84,4 @@ if __name__ == '__main__':
     # Parar a sessão Spark
     spark.stop()
 
-    # .whenMatchedUpdateAll(
-    #   condition = "n.PassengerID <> NULL",
-    #   values = {
-    #     "delta_flag" : "h.delta_flag"
-    #   }) \
-    
-      #     values = {
-      #   "PassengerId":"n.PassengerId",
-      #   "Survived":"n.Survived",
-      #   "Pclass":"n.Pclass",
-      #   "Name":"n.Name",
-      #   "Sex":"n.Sex",
-      #   "Age":"n.Age",
-      #   "Embarked":"n.Embarked",
-      #   "delta_flag":"I",
-      #   "delta_timestamp":"n.delta_timestamp"
-      # }
+ 
