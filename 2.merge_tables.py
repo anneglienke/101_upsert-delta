@@ -37,7 +37,8 @@ if __name__ == '__main__':
     new_data = spark.sql(
         """select
                 new_data.*,
-                'U' as delta_flag, 
+                'I' as delta_flag, 
+                'U' as update_flag,
                 current_timestamp() as delta_timestamp   
             from 
                 new_data""")
@@ -45,19 +46,58 @@ if __name__ == '__main__':
     # Ler tabela histórica 
     h_df = DeltaTable.forPath(spark,"delta/historical/") 
     
-    # Criar a tabela nova
+    # Criar a tabela nova (se criar view, ele retorna 'AttributeError: 'NoneType' object has no attribute 'alias')
     new_df = new_data.write.format("delta").save("delta/updates") 
     n_df = spark.read.format("delta").load("delta/updates/")
+    
 
     # Merge
     h_df.alias("h") \
     .merge(n_df.alias("n"),
     "h.PassengerId = n.PassengerId") \
-    .whenNotMatchedInsertAll() \
-    .whenMatchedUpdateAll() \
+    .whenMatchedUpdate(
+      set = {
+        "PassengerId":"n.PassengerId",
+        "Survived":"n.Survived",
+        "Pclass":"n.Pclass",
+        "Name":"n.Name",
+        "Sex":"n.Sex",
+        "Age":"n.Age",
+        "Embarked":"n.Embarked",
+        "delta_flag":"n.update_flag",
+        "delta_timestamp":"n.delta_timestamp"
+      }) \
+    .whenNotMatchedInsert(
+      values = {
+        "PassengerId":"n.PassengerId",
+        "Survived":"n.Survived",
+        "Pclass":"n.Pclass",
+        "Name":"n.Name",
+        "Sex":"n.Sex",
+        "Age":"n.Age",
+        "Embarked":"n.Embarked",
+        "delta_flag":"n.delta_flag",
+        "delta_timestamp":"n.delta_timestamp"
+      }) \
     .execute() 
 
-    # # Parar a sessão Spark
-    # spark.stop()
+    # Parar a sessão Spark
+    spark.stop()
 
-
+    # .whenMatchedUpdateAll(
+    #   condition = "n.PassengerID <> NULL",
+    #   values = {
+    #     "delta_flag" : "h.delta_flag"
+    #   }) \
+    
+      #     values = {
+      #   "PassengerId":"n.PassengerId",
+      #   "Survived":"n.Survived",
+      #   "Pclass":"n.Pclass",
+      #   "Name":"n.Name",
+      #   "Sex":"n.Sex",
+      #   "Age":"n.Age",
+      #   "Embarked":"n.Embarked",
+      #   "delta_flag":"I",
+      #   "delta_timestamp":"n.delta_timestamp"
+      # }

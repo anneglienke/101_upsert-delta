@@ -31,4 +31,5 @@ if __name__ == '__main__':
     h_df = spark.read.format("delta").load("delta/historical/")
     h_df.show(truncate=False)  
 
+    # Parar a sessão Spark
     spark.stop()

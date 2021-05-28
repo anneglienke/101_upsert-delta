@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     from delta.tables import * 
 
-    # Ler os dados
+    # Ler os dados 
     historical_data = spark.read \
     .format("csv") \
     .option("header", "true") \
@@ -45,8 +45,8 @@ if __name__ == '__main__':
     historical_data.write.format("delta").save("delta/historical") 
 
     # Visualizar tabela criada
-    h_df = spark.read.format("delta").load("delta/historical/")
-    h_df.show()
+    # h_df = spark.read.format("delta").load("delta/historical/")
+    # h_df.show()
 
     # Parar a sessão Spark
     spark.stop()
