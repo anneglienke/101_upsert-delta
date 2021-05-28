@@ -1,8 +1,5 @@
-import os
 from pyspark.sql import SparkSession
-from dotenv import load_dotenv, find_dotenv
 from pyspark.sql.functions import *
-from IPython.display import display
 from pyspark.sql import SQLContext
 
 if __name__ == '__main__':
@@ -44,9 +41,9 @@ if __name__ == '__main__':
     # Criar a tabela nova (se criar view, ele retorna 'AttributeError: 'NoneType' object has no attribute 'alias')
     new_df = new_data.write.format("delta").save("delta/updates") 
     n_df = spark.read.format("delta").load("delta/updates/")
-    
 
     # Merge
+    # Faz update, adiciona flag U e novo timestamp para todos os registros que se repetirem nas duas tabelas, independente de haver mudança. Adiciona registros, flag e novo timestamp I para todos os registros novos. Os registros deletados permanecem com flag I, porém com timestamp desatualizada.
     h_df.alias("h") \
     .merge(n_df.alias("n"),
     "h.PassengerId = n.PassengerId") \

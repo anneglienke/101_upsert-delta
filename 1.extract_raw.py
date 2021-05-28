@@ -1,6 +1,4 @@
-import os
 from pyspark.sql import SparkSession
-from dotenv import load_dotenv, find_dotenv
 from pyspark.sql.functions import *
 from pyspark.sql import SQLContext
 
