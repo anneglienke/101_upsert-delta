@@ -15,39 +15,27 @@ if __name__ == '__main__':
 
     from delta.tables import * 
 
-    # Ler os dados
+    # Ler os dados atuais
     new_data = spark.read \
     .format("csv") \
     .option("header", "true") \
     .option("inferSchema", "true")  \
     .load("titanic2.csv")
-   
-   # Criar view para adicionar colunas
-    new_data.createOrReplaceTempView("new_data")
-
-   # Criar colunas: delta_flag com valor I, update_flag com valor U e current timestamp
-    new_data = spark.sql(
-        """select
-                new_data.*,
-                'I' as delta_flag, 
-                'U' as update_flag,
-                current_timestamp() as delta_timestamp   
-            from 
-                new_data""")
+     
+    # Ler bronze
+    b_df = DeltaTable.forPath(spark,"bronze-zone/") 
     
-    # Ler tabela histórica 
-    h_df = DeltaTable.forPath(spark,"delta/historical/") 
-    
-    # Criar a tabela nova (se criar view, ele retorna 'AttributeError: 'NoneType' object has no attribute 'alias')
-    new_df = new_data.write.format("delta").save("delta/updates") 
-    n_df = spark.read.format("delta").load("delta/updates/")
+    # Criar a tabela nova
+    new_df = new_data.write.format("delta").save("landing-zone") 
+    n_df = spark.read.format("delta").load("landing-zone/")
 
-    # Merge
-    # Faz update, adiciona flag U e novo timestamp para todos os registros que se repetirem nas duas tabelas, independente de haver mudança. Adiciona registros, flag e novo timestamp I para todos os registros novos. Os registros deletados permanecem com flag I, porém com timestamp desatualizada.
-    h_df.alias("h") \
+    # Fazer merge
+    b_df.alias("b") \
     .merge(n_df.alias("n"),
-    "h.PassengerId = n.PassengerId") \
+    "b.PassengerId = n.PassengerId") \
+    .whenMatchedDelete(condition = "n.CHANGE_TYPE = 'D'") \
     .whenMatchedUpdate(
+      condition = "n.CHANGE_TYPE ='A' OR b.CHANGE_TYPE = 'I'",
       set = {
         "PassengerId":"n.PassengerId",
         "Survived":"n.Survived",
@@ -56,21 +44,10 @@ if __name__ == '__main__':
         "Sex":"n.Sex",
         "Age":"n.Age",
         "Embarked":"n.Embarked",
-        "delta_flag":"n.update_flag",
-        "delta_timestamp":"n.delta_timestamp"
-      }) \
-      .whenNotMatchedInsert( 
-        values = {
-          "PassengerId":"n.PassengerId",
-          "Survived":"n.Survived",
-          "Pclass":"n.Pclass",
-          "Name":"n.Name",
-          "Sex":"n.Sex",
-          "Age":"n.Age",
-          "Embarked":"n.Embarked",
-          "delta_flag":"n.delta_flag",
-          "delta_timestamp":"n.delta_timestamp"   
+        "CHANGE_TYPE":"n.CHANGE_TYPE",
+        "CHANGE_TIMESTAMP":"n.CHANGE_TIMESTAMP"
         }) \
+    .whenNotMatchedInsertAll(condition = "n.CHANGE_TYPE = 'I'") \
     .execute() 
 
     # Parar a sessão Spark

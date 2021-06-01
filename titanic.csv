@@ -1,6 +1,6 @@
-PassengerId,Survived,Pclass,Name,Sex,Age,Embarked
-1,0,3,"Braund",male,22,S
-2,1,1,"Cumings",female,38,C
-3,1,3,"Heikkinen",female,26,S
-4,1,1,"Futrelle",female,35,S
+PassengerId,Survived,Pclass,Name,Sex,Age,Embarked,CHANGE_TYPE,CHANGE_TIMESTAMP
+1,0,3,"Braund",male,22,S,I,2021-06-01 08:33:00.387262
+2,1,1,"Cumings",female,38,C,A,2021-06-01 08:33:00.387262
+3,1,3,"Heikkinen",female,26,S,I,2021-06-01 08:33:00.387262
+4,1,1,"Futrelle",female,35,S,D,2021-06-01 08:32:00.387262
 

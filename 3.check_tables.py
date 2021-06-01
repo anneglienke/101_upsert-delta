@@ -15,12 +15,9 @@ if __name__ == '__main__':
 
     from delta.tables import * 
 
-    # Ler tabelas alterada
-    h_df = spark.read.format("delta").load("delta/historical/")
-    h_df.show(truncate=False)  
-
-    n_df = spark.read.format("delta").load("delta/updates/")
-    n_df.show(truncate=False)  
+    # Ler bronze alterada
+    b_df = spark.read.format("delta").load("bronze-zone/")
+    b_df.show(truncate=False)  
 
     # Parar a sessão Spark
     spark.stop()

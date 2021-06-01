@@ -15,34 +15,27 @@ if __name__ == '__main__':
 
     from delta.tables import * 
 
-    # Ler os dados 
-    historical_data = spark.read \
+    # Ler os dados para carga inicial
+    raw_data = spark.read \
     .format("csv") \
     .option("header", "true") \
     .option("inferSchema", "true")  \
     .load("titanic.csv")
 
-    # Criar view
-    historical_data.createOrReplaceTempView("historical_data")
+    # Criar view bronze
+    raw_data.createOrReplaceTempView("rawView")
    
-   # Criar colunas: delta_flag com valor I e current timestamp
-    historical_data = spark.sql(
-        """select 
-                historical_data.*,
-                'I' as delta_flag,
-                current_timestamp() as delta_timestamp              
-            from 
-                historical_data""")
+   # Selecionar só CHANGE_TYPE <> 'D'
+    rawView = spark.sql(
+        """select *            
+            from rawView
+            where CHANGE_TYPE <> 'D'
+            """)
 
-    # Criar a tabela histórica
-    historical_data.write.format("delta").save("delta/historical") 
+    #rawView.show(truncate=False)
 
-    # Visualizar tabela criada
-    h_df = spark.read.format("delta").load("delta/historical/")
-    h_df.show()
-
-    # Parar a sessão Spark
-    spark.stop()
+    # Gravar dados na bronze-zone
+    rawView.write.format("delta").save("bronze-zone/")
 
 
 
