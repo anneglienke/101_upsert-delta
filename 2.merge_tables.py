@@ -34,19 +34,7 @@ if __name__ == '__main__':
     .merge(n_df.alias("n"),
     "b.PassengerId = n.PassengerId") \
     .whenMatchedDelete(condition = "n.CHANGE_TYPE = 'D'") \
-    .whenMatchedUpdate(
-      condition = "n.CHANGE_TYPE ='A' OR b.CHANGE_TYPE = 'I'",
-      set = {
-        "PassengerId":"n.PassengerId",
-        "Survived":"n.Survived",
-        "Pclass":"n.Pclass",
-        "Name":"n.Name",
-        "Sex":"n.Sex",
-        "Age":"n.Age",
-        "Embarked":"n.Embarked",
-        "CHANGE_TYPE":"n.CHANGE_TYPE",
-        "CHANGE_TIMESTAMP":"n.CHANGE_TIMESTAMP"
-        }) \
+    .whenMatchedUpdateAll(condition = "n.CHANGE_TYPE ='A'") \
     .whenNotMatchedInsertAll(condition = "n.CHANGE_TYPE = 'I'") \
     .execute() 
 

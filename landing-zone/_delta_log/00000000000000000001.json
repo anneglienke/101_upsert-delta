@@ -1,2 +1,0 @@
-{"commitInfo":{"timestamp":1622554038497,"operation":"DELETE","operationParameters":{"predicate":"[]"},"readVersion":0,"isBlindAppend":false,"operationMetrics":{"numRemovedFiles":"1"}}}
-{"remove":{"path":"part-00000-43c57ef9-d5ee-4cc8-9527-d126bd0fcf19-c000.snappy.parquet","deletionTimestamp":1622554038478,"dataChange":true,"extendedFileMetadata":true,"partitionValues":{},"size":2444}}

@@ -32,7 +32,7 @@ if __name__ == '__main__':
             where CHANGE_TYPE <> 'D'
             """)
 
-    #rawView.show(truncate=False)
+    # rawView.show(truncate=False)
 
     # Gravar dados na bronze-zone
     rawView.write.format("delta").save("bronze-zone/")
