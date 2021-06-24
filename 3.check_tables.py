@@ -4,15 +4,15 @@ from pyspark.sql import SQLContext
 
 if __name__ == '__main__':
     
-    # Criar a sessão Spark
+    # Create Spark Session
     spark = SparkSession \
       .builder \
       .appName("Job - Raw-zone") \
       .getOrCreate()    
 
-    # Ler bronze alterada
+    # Read and show data on raw-zone
     b_df = spark.read.format("parquet").load("raw-zone/")
     b_df.show(truncate=False)  
 
-    # Parar a sessão Spark
+    # Stop Spark session
     spark.stop()

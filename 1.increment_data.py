@@ -4,26 +4,27 @@ from pyspark.sql import SQLContext
 
 if __name__ == '__main__':
     
-    # Criar a sessão Spark
+    # Create Spark session
     spark = SparkSession \
       .builder \
       .appName("Job - increment") \
       .getOrCreate()    
 
-    # Ler os dados delta
+    # Read incremented data
     delta_data = spark.read \
     .format("csv") \
     .option("header", "true") \
     .option("inferSchema", "true")  \
     .load("titanic2.csv")
 
-    # Creates delta view
+    # Create delta view
     delta_data.createOrReplaceTempView("deltaView")
 
-    # Reads raw-zone and creates raw view
+    # Read raw-zone and create raw view
     raw_data = spark.read.format("parquet").load("raw-zone/")
     raw_data.createOrReplaceTempView("rawView")
    
+   # Create incremented view with only new data 
     incrementedView = spark.sql(
         """select * 
         from deltaView as d
@@ -32,8 +33,11 @@ if __name__ == '__main__':
             """)
     #incrementedView.show(truncate=False)  
 
-    # Gravar dados na bronze-zone
+    # Append incremented data to raw-zone
     incrementedView.write.mode("append").parquet("raw-zone/")
+
+    # Stop Spark session
+    spark.stop()
 
 
 

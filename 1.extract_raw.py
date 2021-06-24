@@ -4,31 +4,32 @@ from pyspark.sql import SQLContext
 
 if __name__ == '__main__':
     
-    # Criar a sessão Spark
+    # Create Spark Session
     spark = SparkSession \
       .builder \
       .appName("Job - Raw-zone") \
       .getOrCreate()    
 
-    # Ler os dados para carga inicial
+    # Read raw data
     raw_data = spark.read \
     .format("csv") \
     .option("header", "true") \
     .option("inferSchema", "true")  \
     .load("titanic.csv")
 
-    # Criar view bronze
+    # Create raw view
     raw_data.createOrReplaceTempView("rawView")
    
-   # Criar view
     rawView = spark.sql(
         """select *            
             from rawView
             """)
 
-    # Gravar dados na bronze-zone
+    # Write data to raw-zone
     rawView.write.parquet("raw-zone/")
 
+    # Stop Spark session
+    spark.stop()
 
 
 
