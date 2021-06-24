@@ -1,6 +1,10 @@
-PassengerId,Survived,Pclass,Name,Sex,Age,Embarked,CHANGE_TYPE,CHANGE_TIMESTAMP
-2,1,1,"Cumings",female,38,C,D,2021-06-01 08:34:00.387262
-3,1,3,"Heikkinen",female,26,S,A,2021-06-01 08:33:00.387262
-7,1,1,"Teste",male,30,S,I,2021-06-01 08:33:00.387262
-5,0,3,"Allen",male,35,S,I,2021-06-01 08:35:45.019904
-6,0,3,"Moran",male,,Q,I,2021-06-01 08:35:45.019904
+PassengerId,Name,Sex,Age,CHANGE_TYPE,CHANGE_TIMESTAMP
+1,"Braund",male,22,I,2021-06-01 08:33:00.387262
+2,"Cumings",female,38,A,2021-06-01 08:33:00.387262
+3,"Heikkinen",female,26,I,2021-06-01 08:33:00.387262
+4,"Futrelle",female,35,D,2021-06-01 08:32:00.387262
+2,"Cumings",female,38,D,2021-06-01 08:34:00.387262
+3,"Heikkinen",female,26,A,2021-06-01 08:34:00.387262
+7,"Teste",male,30,I,2021-06-01 08:34:00.387262
+5,"Allen",male,35,I,2021-06-01 08:34:45.019904
+6,"Moran",male,,I,2021-06-01 08:34:45.019904
