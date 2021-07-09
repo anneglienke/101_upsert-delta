@@ -1,3 +1,5 @@
+# Incremental snapshot ingestion
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql import SQLContext
@@ -24,10 +26,6 @@ if __name__ == '__main__':
     .option("header", "true") \
     .option("inferSchema", "true")  \
     .load("titanic3.csv")
-    
-    # Create delta table
-    # delta_data = new_data.write.format("delta").save("landing-zone") 
-    # d_data = spark.read.format("delta").load("landing-zone/")
 
     # Merge tables
     staging_data.alias("s") \
