@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     incrementedView.show(truncate=False)  
 
-    # Append incremented data to raw-zone
+    # Save snapshot in delta format to staging-zone
     incrementedView.write.format("delta").save("staging-zone/")
     
     # Delete historical delta files
