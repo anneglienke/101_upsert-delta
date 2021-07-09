@@ -4,7 +4,7 @@ PassengerId,Name,Sex,Age,CHANGE_TYPE,CHANGE_TIMESTAMP
 3,"Heikkinen",female,26,I,2021-06-01 08:33:00.387262
 4,"Futrelle",female,35,D,2021-06-01 08:32:00.387262
 2,"Cumings",female,38,D,2021-06-01 08:34:00.387262
-3,"Heikkinen",female,26,A,2021-06-01 08:34:00.387262
-7,"Teste",male,30,I,2021-06-01 08:34:00.387262
-5,"Allen",male,35,I,2021-06-01 08:34:45.019904
-6,"Moran",male,,I,2021-06-01 08:34:45.019904
+3,"Heoon",female,26,A,2021-06-01 08:34:00.387262
+5,"Sherllock",male,30,I,2021-06-01 08:34:00.387262
+6,"Allen",male,35,I,2021-06-01 08:34:45.019904
+7,"Moran",male,,I,2021-06-01 08:34:45.019904

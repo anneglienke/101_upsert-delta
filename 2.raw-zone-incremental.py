@@ -1,3 +1,5 @@
+# Incremental ingestion (append) to raw-zone
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql import SQLContext
@@ -7,10 +9,10 @@ if __name__ == '__main__':
     # Create Spark session
     spark = SparkSession \
       .builder \
-      .appName("Job - increment") \
+      .appName("Job - Increment Raw-Zone") \
       .getOrCreate()    
 
-    # Read incremented data
+    # Read delta
     delta_data = spark.read \
     .format("csv") \
     .option("header", "true") \
@@ -26,10 +28,10 @@ if __name__ == '__main__':
    
    # Create incremented view with only new data 
     incrementedView = spark.sql(
-        """select * 
-        from deltaView as d
-        where d.CHANGE_TIMESTAMP > (select max(CHANGE_TIMESTAMP)
-                                    from rawView as r)
+        """SELECT * 
+        FROM deltaView AS d
+        WHERE d.CHANGE_TIMESTAMP > (SELECT max(CHANGE_TIMESTAMP)
+                                    FROM rawView AS r)
             """)
     #incrementedView.show(truncate=False)  
 

@@ -1,0 +1,5 @@
+PassengerId,Name,Sex,Age,CHANGE_TYPE,CHANGE_TIMESTAMP
+1,"Braund",male,24,A,2021-06-01 08:35:00.387262
+3,"Heikkinen",female,26,D,2021-06-01 08:35:00.387262
+8,"Cavill",female,40,I,2021-06-01 08:35:00.387262
+9,"Haounn",female,29,I,2021-06-01 08:35:00.387262
