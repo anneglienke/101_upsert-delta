@@ -23,6 +23,6 @@ This repository exemplifies a simple ELT process using delta to perform upsert a
 - [3.staging-zone-ingestion](https://github.com/anneglienke/upsert-delta/blob/main/3.staging-zone-ingestion.py) - snapshot of the current db and creation of staging-zone (delta)
 - [4.staging-zone-incremental](https://github.com/anneglienke/upsert-delta/blob/main/4.staging-zone-incremental.py) - incremental snapshot ingestion (delta)
 - Check scripts (check_raw-zone.py, check_staging-zone.py) - scripts to read and monitor tables being created
-- CSV files (titanic.csv, titanic2.csv, titanic3.csv) - simulate changes on tables being ingested
+- CSV files (titanic.csv, titanic2.csv, titanic3.csv) - simulate changes in tables being ingested
 - Directories (raw-zone, staging-zone) - store the data 
 
