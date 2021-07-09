@@ -14,7 +14,7 @@
 ---
 
 # Introduction to Delta Upsert
-This is a repository that simply exemplifies an ELT process using delta to perform upsert and remove data files that aren't in the latest state of the transaction log for the table.
+This repository exemplifies a simple ELT process using delta to perform upsert and remove data files that aren't in the latest state of the transaction log for the table.
 
 ## 📝 Table of Contents
 
