@@ -13,6 +13,7 @@ if __name__ == '__main__':
       .config("spark.jars.packages", "io.delta:delta-core_2.12:0.8.0") \
       .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
       .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+      .config("spark.databricks.delta.retentionDurationCheck.enabled", "false") \
       .getOrCreate()    
 
     from delta.tables import *    
@@ -49,6 +50,10 @@ if __name__ == '__main__':
 
     # Append incremented data to raw-zone
     incrementedView.write.format("delta").save("staging-zone/")
+    
+    # Delete historical delta files
+    staging_zone = DeltaTable.forPath(spark, "staging-zone/")
+    staging_zone.vacuum(0.000001)
 
     # Stop Spark session
     spark.stop()
