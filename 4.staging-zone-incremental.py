@@ -3,6 +3,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql import SQLContext
+from delta.tables import * 
 
 if __name__ == '__main__':
     
@@ -15,8 +16,6 @@ if __name__ == '__main__':
       .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
       .config("spark.databricks.delta.retentionDurationCheck.enabled", "false") \
       .getOrCreate()    
-
-    from delta.tables import * 
 
     # Read staging data
     staging_data = DeltaTable.forPath(spark,"staging-zone/")
