@@ -27,11 +27,11 @@ if __name__ == '__main__':
     .option("inferSchema", "true")  \
     .load("titanic3.csv")
 
-    # Merge tables
+    # Merge tables 
     staging_data.alias("s") \
     .merge(delta_data.alias("d"),
     "s.PassengerId = d.PassengerId") \
-    .whenMatchedDelete(condition = "d.CHANGE_TYPE = 'D'") \
+    .whenMatchedDelete(condition = "d.CHANGE_TYPE = 'D'") \    #conditions are optional
     .whenMatchedUpdateAll(condition = "d.CHANGE_TYPE ='A'") \
     .whenNotMatchedInsertAll(condition = "d.CHANGE_TYPE = 'I'") \
     .execute() 
